@@ -64,7 +64,7 @@ function ProjectList() {
                     <div className="card-header">
                         <Link 
                             className="btn btn-outline-primary"
-                            to="/create">Create New Project
+                            to="/create">Create New Project cambiado
                         </Link>
                     </div>
                     <div className="card-body">
