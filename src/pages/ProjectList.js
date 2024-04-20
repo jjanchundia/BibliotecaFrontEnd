@@ -1,31 +1,97 @@
-import React,{ useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
- 
- 
-  
-function ProjectList() {
-    const  [projectList, setProjectList] = useState([])
-  
+
+
+
+function LibroList() {
+    const [LibroList, setLibroList] = useState([])
+
     useEffect(() => {
-        fetchProjectList()
+        fetchLibroList()
     }, [])
-  
-    const fetchProjectList = () => {
+
+    const fetchLibroList = () => {
         axios.get('/api/libros')
-        .then(function (response) {
-          setProjectList(response.data);
-          console.log(response.data);
-        })
-        .catch(function (error) {
-          console.log(error);
+            .then(function (response) {
+                setLibroList(response.data);
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }
+
+    const handlePrestar = (id) => {
+        Swal.fire({
+            title: 'Está seguro de Prestar Libro?',
+            text: "",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, Prestar!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post('/api/libros/prestar', {
+                    libroId: id
+                }).then(function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Libro Prestado Correctamente!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        fetchLibroList()
+                    })
+                    .catch(function (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'An Error Occured!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    });
+            }
         })
     }
-  
+
+    const handleDevolver = (id) => {
+        Swal.fire({
+            title: 'Está seguro de Devolver Libro?',
+            text: "",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, Devolver!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post('/api/libros/devolver',{ libroId: id })
+                    .then(function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Libro Devuelto Correctamente!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        fetchLibroList()
+                    })
+                    .catch(function (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'An Error Occured!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    });
+            }
+        })
+    }
+
     const handleDelete = (id) => {
-        alert(id)
         Swal.fire({
             title: 'Está seguro de eliminar Libro?',
             text: "Acción no se podrá revertir",
@@ -34,43 +100,43 @@ function ProjectList() {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, Eliminar!'
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 axios.delete(`/api/libros/delete/${id}`)
-                .then(function (response) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Libro Eliminado Correctamente!',
-                        showConfirmButton: false,
-                        timer: 1500
+                    .then(function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Libro Eliminado Correctamente!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        fetchLibroList()
                     })
-                    fetchProjectList()
-                })
-                .catch(function (error) {
-                    Swal.fire({
-                         icon: 'error',
-                        title: 'An Error Occured!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                });
+                    .catch(function (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'An Error Occured!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    });
             }
-          })
+        })
     }
-  
+
     return (
         <Layout>
-           <div className="container">
-            <h2 className="text-center mt-5 mb-3">Listado de Libros</h2>
+            <div className="container">
+                <h2 className="text-center mt-5 mb-3">Listado de Libros</h2>
                 <div className="card">
                     <div className="card-header">
-                        <Link 
+                        <Link
                             className="btn btn-outline-primary"
                             to="/create">Ingresar Nuevo Libro
                         </Link>
                     </div>
                     <div className="card-body">
-              
+
                         <table className="table table-bordered">
                             <thead>
                                 <tr>
@@ -81,32 +147,46 @@ function ProjectList() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {projectList.map((project, key)=>{
+                                {LibroList.map((Libro, key) => {
                                     return (
-                                        <tr key={project.libroId}>
-                                            <td>{project.nombre}</td>
-                                            <td>{project.descripcion}</td>
+                                        <tr key={Libro.libroId}>
+                                            <td>{Libro.nombre}</td>
+                                            <td>{Libro.descripcion}</td>
                                             <td>
-                                                {project.estado === 'L' ? 'Libre' : project.estado === 'P' ?
-                                                 'Prestado' : project.estado}
+                                                {Libro.estado === 'L' ? 'Libre' : Libro.estado === 'P' ?
+                                                    'Prestado' : Libro.estado}
                                             </td>
                                             <td>
-                                                <Link
-                                                    to={`/show/${project.libroId}`}
+                                                {/* <Link
+                                                    to={`/show/${Libro.libroId}`}
                                                     className="btn btn-outline-info mx-1">
                                                     Show
                                                 </Link>
                                                 <Link
                                                     className="btn btn-outline-success mx-1"
-                                                    to={`/edit/${project.libroId}`}>
+                                                    to={`/edit/${Libro.libroId}`}>
                                                     Edit
-                                                </Link>
-                                                <button 
-                                                    onClick={()=>handleDelete(project.libroId)}
+                                                </Link> */}
+                                                {Libro.estado === 'L' ? (
+                                                    <button
+                                                        onClick={() => handlePrestar(Libro.libroId)}
+                                                        className="btn btn-outline-primary mx-1">
+                                                        Prestar
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => handleDevolver(Libro.libroId)}
+                                                        className="btn btn-outline-warning mx-1">
+                                                        Devolver
+                                                    </button>
+                                                )}
+                                                <button
+                                                    onClick={() => handleDelete(Libro.libroId)}
                                                     className="btn btn-outline-danger mx-1">
-                                                    Delete
+                                                    Eliminar
                                                 </button>
                                             </td>
+
                                         </tr>
                                     )
                                 })}
@@ -118,5 +198,5 @@ function ProjectList() {
         </Layout>
     );
 }
-  
-export default ProjectList;
+
+export default LibroList;
