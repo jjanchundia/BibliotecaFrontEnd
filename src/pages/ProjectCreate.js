@@ -12,14 +12,14 @@ function ProjecCreate() {
   
     const handleSave = () => {
         setIsSaving(true);
-        axios.post('/api/projects', {
-            name: name,
-            description: description
+        axios.post('/api/libros/register', {
+            Nombre: name,
+            Descripcion: description
           })
           .then(function (response) {
             Swal.fire({
                 icon: 'success',
-                title: 'Project saved successfully!',
+                title: 'Libro Creado Correctamente!',
                 showConfirmButton: false,
                 timer: 1500
             })
@@ -46,13 +46,13 @@ function ProjecCreate() {
                     <div className="card-header">
                         <Link 
                             className="btn btn-outline-info float-right"
-                            to="/">View All Projects
+                            to="/">Ver todos los libros
                         </Link>
                     </div>
                     <div className="card-body">
                         <form>
                             <div className="form-group">
-                                <label htmlFor="name">Name</label>
+                                <label htmlFor="name">Nombre</label>
                                 <input 
                                     onChange={(event)=>{setName(event.target.value)}}
                                     value={name}
@@ -62,7 +62,7 @@ function ProjecCreate() {
                                     name="name"/>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="description">Description</label>
+                                <label htmlFor="description">Descripción</label>
                                 <textarea 
                                     value={description}
                                     onChange={(event)=>{setDescription(event.target.value)}}
@@ -76,7 +76,7 @@ function ProjecCreate() {
                                 onClick={handleSave} 
                                 type="button"
                                 className="btn btn-outline-primary mt-3">
-                                Save Project
+                                Guardar
                             </button>
                         </form>
                     </div>
