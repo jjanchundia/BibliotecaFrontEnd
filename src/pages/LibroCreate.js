@@ -5,17 +5,42 @@ import axios from 'axios'
 import Layout from "../components/Layout"
  
  
-function ProjecCreate() {
+function LibroCreate() {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('')
     const [isSaving, setIsSaving] = useState(false)
   
     const handleSave = () => {
+
+        if(name === ""){
+            Swal.fire({
+                icon: 'error',
+                title: 'Ingrese Nombre!',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            return;
+        }
+
+        if(description === ""){
+            Swal.fire({
+                icon: 'error',
+                title: 'Ingrese Descripción!',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            return;
+        }
+
         setIsSaving(true);
         axios.post('/api/libros/register', {
             Nombre: name,
             Descripcion: description
-          })
+          },{
+                headers: {
+                    Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHJpbmciOiJzdHJpbmciLCJleHAiOjE3MTM2NzI4MDMsImlzcyI6IldlYkFwaUp3dC5jb20iLCJhdWQiOiJsb2NhbGhvc3QifQ.8UGETGnZlnJ7Qrngn7t_nNteYiQDDntCFVnn81oSUOQ"}`
+                }
+            })
           .then(function (response) {
             Swal.fire({
                 icon: 'success',
@@ -41,12 +66,12 @@ function ProjecCreate() {
     return (
         <Layout>
             <div className="container">
-                <h2 className="text-center mt-5 mb-3">Create New Project</h2>
+                <h2 className="text-center mt-5 mb-3">Crear Nuevo Libro</h2>
                 <div className="card">
                     <div className="card-header">
                         <Link 
                             className="btn btn-outline-info float-right"
-                            to="/">Ver todos los libros
+                            to="/libros">Ver todos los Libros
                         </Link>
                     </div>
                     <div className="card-body">
@@ -86,4 +111,4 @@ function ProjecCreate() {
     );
 }
   
-export default ProjecCreate;
+export default LibroCreate;

@@ -14,7 +14,12 @@ function LibroList() {
     }, [])
 
     const fetchLibroList = () => {
-        axios.get('/api/libros')
+        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHJpbmciOiJzdHJpbmciLCJleHAiOjE3MTM2NzI4MDMsImlzcyI6IldlYkFwaUp3dC5jb20iLCJhdWQiOiJsb2NhbGhvc3QifQ.8UGETGnZlnJ7Qrngn7t_nNteYiQDDntCFVnn81oSUOQ"
+        axios.get('/api/libros',{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             .then(function (response) {
                 setLibroList(response.data);
                 console.log(response.data);
@@ -132,7 +137,7 @@ function LibroList() {
                     <div className="card-header">
                         <Link
                             className="btn btn-outline-primary"
-                            to="/create">Ingresar Nuevo Libro
+                            to="/libros/create">Ingresar Nuevo Libro
                         </Link>
                     </div>
                     <div className="card-body">
