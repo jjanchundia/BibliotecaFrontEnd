@@ -4,22 +4,20 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
 
-
-
 function LibroList() {
     const [LibroList, setLibroList] = useState([])
+    let token = localStorage.getItem("token");
 
     useEffect(() => {
         fetchLibroList()
     }, [])
 
     const fetchLibroList = () => {
-        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHJpbmciOiJzdHJpbmciLCJleHAiOjE3MTM2NzI4MDMsImlzcyI6IldlYkFwaUp3dC5jb20iLCJhdWQiOiJsb2NhbGhvc3QifQ.8UGETGnZlnJ7Qrngn7t_nNteYiQDDntCFVnn81oSUOQ"
-        axios.get('/api/libros',{
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+        axios.get('/api/libros', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
             .then(function (response) {
                 setLibroList(response.data);
                 console.log(response.data);
@@ -42,15 +40,21 @@ function LibroList() {
             if (result.isConfirmed) {
                 axios.post('/api/libros/prestar', {
                     libroId: id
-                }).then(function (response) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Libro Prestado Correctamente!',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                        fetchLibroList()
+                },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                ).then(function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Libro Prestado Correctamente!',
+                        showConfirmButton: false,
+                        timer: 1500
                     })
+                    fetchLibroList()
+                })
                     .catch(function (error) {
                         Swal.fire({
                             icon: 'error',
@@ -74,7 +78,12 @@ function LibroList() {
             confirmButtonText: 'Sí, Devolver!'
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.post('/api/libros/devolver',{ libroId: id })
+                axios.post('/api/libros/devolver', { libroId: id },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
                     .then(function (response) {
                         Swal.fire({
                             icon: 'success',
@@ -107,7 +116,12 @@ function LibroList() {
             confirmButtonText: 'Sí, Eliminar!'
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`/api/libros/delete/${id}`)
+                axios.delete(`/api/libros/delete/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
                     .then(function (response) {
                         Swal.fire({
                             icon: 'success',

@@ -1,7 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Navbar() {
+    const go = useNavigate();
+
+    const salir = async () => {
+        localStorage.removeItem("token");
+        go('/');
+    }
+
     return (
         <div>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -20,7 +27,12 @@ export default function Navbar() {
                             </li>
                         </ul>
                         <form class="d-flex">
-                            <Link class="btn btn-outline-danger" to='/'>Salir</Link>
+                            <button
+                                onClick={salir}
+                                type="button"
+                                className="btn btn-outline-danger">
+                                Salir
+                            </button>
                         </form>
                     </div>
                 </div>

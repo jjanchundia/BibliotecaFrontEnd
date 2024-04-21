@@ -33,12 +33,13 @@ function LibroCreate() {
         }
 
         setIsSaving(true);
+        let token = localStorage.getItem("token");
         axios.post('/api/libros/register', {
             Nombre: name,
             Descripcion: description
           },{
                 headers: {
-                    Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHJpbmciOiJzdHJpbmciLCJleHAiOjE3MTM2NzI4MDMsImlzcyI6IldlYkFwaUp3dC5jb20iLCJhdWQiOiJsb2NhbGhvc3QifQ.8UGETGnZlnJ7Qrngn7t_nNteYiQDDntCFVnn81oSUOQ"}`
+                    Authorization: `Bearer ${token}`
                 }
             })
           .then(function (response) {

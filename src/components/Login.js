@@ -42,7 +42,10 @@ function Login() {
                 setUsuario('')
                 setPassword('')
 
-                console.log(response.data.token);
+                // Almacenamos el token en nuestro localstorage para usarlo en las 
+                // demas peticiones mas adelante
+                localStorage.setItem("token", response.data.token);
+                console.log(localStorage.getItem("token"));
                 navigate('/libros'); // Redireccionamos a la página de libros
             })
             .catch(function (error) {
