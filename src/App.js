@@ -4,8 +4,8 @@ import NotFound from "./components/NotFound"
 import LibroList from "./pages/LibroList"
 import LibroCreate from "./pages/LibroCreate"
 import Login from "./components/Login"
-// import LibroEdit from "./pages/LibroEdit"
-// import LibroShow from "./pages/LibroShow"
+import LibroEdit from "./pages/LibroEdit"
+import LibroShow from "./pages/LibroShow"
 
 function App() {
   const isAuthenticated = () => {
@@ -27,14 +27,12 @@ function App() {
     <Router>
       <Routes>
         <Route exact path="/" element={<Login />} />
-        {/* <Route exact path="/libros" element={<LibroList />} />
-        <Route path="/libros/create" element={<LibroCreate />} /> */}
-        {/* Utiliza el componente PrivateRoute para proteger las rutas */}
+        {/* Utilizamos el componente PrivateRoute para proteger las rutas */}
         <Route path="/libros" element={<PrivateRoute element={<LibroList />} />} />
         <Route path="/libros/create" element={<PrivateRoute element={<LibroCreate />} />} />
         <Route path="*" element={<NotFound />} />
-        {/* <Route path="/edit/:id"  element={<LibroEdit/>} />
-          <Route path="/show/:id"  element={<LibroShow/>} /> */}
+        <Route path="/libros/editar/:id" element={<PrivateRoute element={<LibroEdit />} />} />
+        <Route path="/libros/mostrar/:id" element={<PrivateRoute element={<LibroShow />} />} />
       </Routes>
     </Router>
   );

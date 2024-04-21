@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
@@ -9,6 +9,7 @@ function LibroCreate() {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('')
     const [isSaving, setIsSaving] = useState(false)
+    const go = useNavigate();
   
     const handleSave = () => {
 
@@ -52,6 +53,7 @@ function LibroCreate() {
             setIsSaving(false);
             setName('')
             setDescription('')
+            go("/libros")
           })
           .catch(function (error) {
             Swal.fire({

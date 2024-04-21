@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
@@ -9,14 +9,21 @@ function ProjectEdit() {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('')
     const [isSaving, setIsSaving] = useState(false)
-  
-      
+    let token = localStorage.getItem("token");
+    const go = useNavigate();
+
     useEffect(() => {
-        axios.get(`/api/projects/${id}`)
+        axios.get(`/api/libros/${id}`, 
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
         .then(function (response) {
-            let project = response.data
-            setName(project.name);
-            setDescription(project.description);
+            let libro = response.data.value;
+            setName(libro.nombre);
+            setDescription(libro.descripcion);
+            console.log(libro);
         })
         .catch(function (error) {
             Swal.fire({
@@ -32,18 +39,26 @@ function ProjectEdit() {
   
     const handleSave = () => {
         setIsSaving(true);
-        axios.patch(`/api/projects/${id}`, {
-            name: name,
-            description: description
+        axios.post(`/api/Libros/edit`, {
+            libroId: id,
+            nombre: name,
+            descripcion: description
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         })
         .then(function (response) {
             Swal.fire({
                 icon: 'success',
-                title: 'Project updated successfully!',
+                title: 'Libro actualizado correctamente!',
                 showConfirmButton: false,
                 timer: 1500
             })
             setIsSaving(false);
+            
+            go('/libros');
         })
         .catch(function (error) {
             Swal.fire({
@@ -60,18 +75,18 @@ function ProjectEdit() {
     return (
         <Layout>
             <div className="container">
-                <h2 className="text-center mt-5 mb-3">Edit Project</h2>
+                <h2 className="text-center mt-5 mb-3">Editar Libro</h2>
                 <div className="card">
                     <div className="card-header">
                         <Link 
                             className="btn btn-outline-info float-right"
-                            to="/">View All Projects
+                            to="/libros">Ver todos los Libros
                         </Link>
                     </div>
                     <div className="card-body">
                         <form>
                             <div className="form-group">
-                                <label htmlFor="name">Name</label>
+                                <label htmlFor="name">Nombre</label>
                                 <input 
                                     onChange={(event)=>{setName(event.target.value)}}
                                     value={name}
@@ -81,7 +96,7 @@ function ProjectEdit() {
                                     name="name"/>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="description">Description</label>
+                                <label htmlFor="description">Descripción</label>
                                 <textarea 
                                     value={description}
                                     onChange={(event)=>{setDescription(event.target.value)}}
@@ -95,7 +110,7 @@ function ProjectEdit() {
                                 onClick={handleSave} 
                                 type="button"
                                 className="btn btn-outline-success mt-3">
-                                Update Project
+                                Actualizar Libro
                             </button>
                         </form>
                     </div>

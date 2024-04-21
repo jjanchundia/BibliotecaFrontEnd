@@ -19,7 +19,7 @@ function LibroList() {
             }
         })
             .then(function (response) {
-                setLibroList(response.data);
+                setLibroList(response.data.value);
                 console.log(response.data);
             })
             .catch(function (error) {
@@ -176,16 +176,16 @@ function LibroList() {
                                                     'Prestado' : Libro.estado}
                                             </td>
                                             <td>
-                                                {/* <Link
-                                                    to={`/show/${Libro.libroId}`}
+                                                <Link
+                                                    to={`/libros/mostrar/${Libro.libroId}`}
                                                     className="btn btn-outline-info mx-1">
-                                                    Show
+                                                    Ver
                                                 </Link>
                                                 <Link
                                                     className="btn btn-outline-success mx-1"
-                                                    to={`/edit/${Libro.libroId}`}>
-                                                    Edit
-                                                </Link> */}
+                                                    to={`/libros/editar/${Libro.libroId}`}>
+                                                    Editar
+                                                </Link>
                                                 {Libro.estado === 'L' ? (
                                                     <button
                                                         onClick={() => handlePrestar(Libro.libroId)}
