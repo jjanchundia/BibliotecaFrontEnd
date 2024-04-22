@@ -44,7 +44,7 @@ function Login() {
 
                 // Almacenamos el token en nuestro localstorage para usarlo en las 
                 // demas peticiones mas adelante
-                localStorage.setItem("token", response.data.token);
+                localStorage.setItem("token", response.data.value.token);
                 console.log(localStorage.getItem("token"));
                 navigate('/libros'); // Redireccionamos a la página de libros
             })
